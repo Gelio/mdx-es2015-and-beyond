@@ -1,45 +1,208 @@
 import { Head, Code, Appear, components as Components } from 'mdx-deck'
 import { FullscreenCode, Split, SplitRight } from 'mdx-deck/layouts'
+import ImageWithLabel from './components/image-with-label'
 
 export { default as theme } from './theme'
 
 <Head>
-  <title>Presentation title</title>
+  <title>ES2015 and beyond</title>
 </Head>
 
-# Presentation title
+# ES2015 and beyond
 
-Author: XYZ
+<ImageWithLabel label="Jak żyć na froncie?">
+  <img src="./static/logo-jak-zyc-na-froncie.png" />
+</ImageWithLabel>
+
+Author: Grzegorz Rozdzialik
+
+---
+
+## Two parts
+
+1. Revision of ES2015 and beyond features
+2. Revision of the basics of React
+
+---
+
+## Revision of ES2015 and beyond features
+
+1. Clone
+   https://github.com/Gelio/es2015-and-beyond-workshop
+2. Read the **README** of that project
+3. Complete all the exercises
+
+```notes
+Exercises will be done together with the _teacher_.
+
+Feel free to work at your own pace
+```
+
+---
+
+## Revision of the basics of React
+
+1. `npx create-react-app my-app`
+2. `cd my-app`
+3. `npm start`
+
+---
+
+## Stateless components
+
+```jsx
+function App(props) {
+  return <div>Hello {props.name}!</div>
+}
+```
+
+- The simplest type of component.
+- A regular Javascript function (can be an arrow function)
+- Take props as the first parameter
+- Have no state
+- Rerender every time the parent rerenders
+
+---
+
+## Passing props to children
+
+```jsx
+function Parent({ child1Name, child2Name }) {
+  return (
+    <div>
+      <Child name={child1Name} text="Hello" />
+      <Child name={child2Name} text="Goodbye" />
+    </div>
+  )
+}
+
+function Child({ text, name }) {
+  return (
+    <div>
+      {text} {props.name}!
+    </div>
+  )
+}
+```
 
 ---
 
 export default SplitRight
 
-## Task for today
+```jsx
+function ReturnsMultipleChildren() {
+  // NOTE: <> === <React.Fragment>
+  return (
+    <>
+      <Child1 />
+      <Child2 />
+      <Child3 />
+    </>
+  )
+}
+```
 
-Using a different layout
+## How to avoid unnecessary `div`s?
 
-- List item 1
-- List item 2
-
-```notes
-Presenter notes are also available
+```jsx
+function ReturnsMultipleChildren() {
+  return (
+    <div>
+      <Child1 />
+      <Child2 />
+      <Child3 />
+    </div>
+  )
+}
 ```
 
 ---
 
-## A regular slide
+export default SplitRight
 
-```js
-const withSome = 'code'
+```jsx
+class App extends React.Component {
+  state = {
+    value: 0,
+  }
+
+  render() {
+    return (
+      <>
+        <div>Value: {this.state.value}</div>
+        <button onClick={this._increment}>Increment</button>
+      </>
+    )
+  }
+
+  _increment = () => {
+    this.setState({
+      value: this.state.value + 1,
+    })
+  }
+}
 ```
 
-```tsx
-interface AlsoTypescript {
-  a: number
+## Class components
+
+- Have state
+- A regular Javascript class that extends `React.Component`
+- Rerender every time the parent updates or the state changes
+
+---
+
+## Component lifecycle
+
+https://reactjs.org/docs/react-component.html#the-component-lifecycle
+
+- Class methods called when something is happening with that component
+
+Important ones:
+
+- `componentDidMount`
+- `componentDidUpdate`
+- `componentWillUnmount`
+
+---
+
+## Component optimizations
+
+`shouldComponentUpdate` method
+
+rerender component based on some criteria
+
+```jsx
+class SomeComponent extends React.Component {
+  // ...
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.name === nextProps.name) {
+      return false
+    }
+
+    return true
+  }
+}
+```
+
+---
+
+## `React.PureComponent`
+
+- A substitute for `React.Component`
+- Implements `shouldComponentUpdate`
+- Performs a shallow comparison of `props` and `state`
+- Only updates when at least one property of `props` or `state` differs
+
+```jsx
+class SomeComponent extends React.PureComponent {
+  render() {
+    return <div>{this.props.name}</div>
+  }
 }
 
-const AndTSX = <div />
+// NOTE: SomeComponent will never update because props are always the same
+const App = () => <SomeComponent name="Foo" />
 ```
 
 ---
@@ -48,4 +211,12 @@ const AndTSX = <div />
 
 ---
 
-Thank you for your participation.
+### Thank you for your participation.
+
+<ImageWithLabel label="Jak żyć na froncie?">
+  <img src="./static/logo-jak-zyc-na-froncie.png" />
+</ImageWithLabel>
+
+```notes
+On 01/14/2019 there is going to be a workshop on prototypal inheritance in Javascript.
+```
